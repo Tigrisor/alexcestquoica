@@ -23,11 +23,30 @@ function displayRandomPicture(categoryNumberArray, categoryArray) {
 	var categoryNumber = categoryNumberArray[randomIndexNumber];
 	// on récupère la liste des fichier associés a la catégorie
 	var filesList = categoryArray[categoryNumber].files;
+	
+	//log
+	console.log(" ==>"+categoryArray[categoryNumber].directory);
+	
 	// on détermine au hasard le numéro du fichier a utiliser
 	var randomFileNumber=Math.floor(Math.random() * filesList.length);		
 	// on affiche le fichier correspondant au numéro
 	$("#label").text(filesList[randomFileNumber].name);
+	
+	// fadeIn et fadeOut ne marchent pas, pkoi ?
+	//jQuery("#label").fadeOut();
+	//jQuery("#label").fadeIn('slow');
+	
 	$("#picture").attr("src",filesList[randomFileNumber].path); 
+	
+	// partie resizing de l'image
+	var ratio=0.75;
+	var maxHeight = $(window).height()*ratio;
+	//var maxWidth = $(window).width()*ratio;
+	
+	//$("#picture").attr("max-height",maxHeight);
+	//$("#picture").attr("max-width",maxWidth);	
+	$("#picture").attr("height",maxHeight);
+	//$("#picture").attr("width",maxWidth);
 	
 	// on supprime le numéro de catégorie utilisé pour ne pas le retrouver au prochain passage
 	categoryNumberArray.splice(randomIndexNumber, 1);	
@@ -35,21 +54,21 @@ function displayRandomPicture(categoryNumberArray, categoryArray) {
 	return categoryNumberArray;
 }
 
+// appelé lors du clic sur l'image
 function clickHandler() {	
 
-	//var categoryNumberArray = [];
-
 	categoryNumberArray = displayRandomPicture(categoryNumberArray, categoryArray);
-	/*
-	var randomCategoryNumber=Math.floor(Math.random() * categoryArray.length);
+	printCategoryArray(categoryNumberArray, categoryArray);
 	
-	var filesList = categoryArray[randomCategoryNumber].files;
-	
-	var randomFileNumber=Math.floor(Math.random() * filesList.length);
-	
-	$("#label").text(filesList[randomFileNumber].name);
-	$("#picture").attr("src",filesList[randomFileNumber].path);  
-*/	
+}
+
+// imprime le tableau des catégories en param
+function printCategoryArray(categoryNumberArray, categoryArray) {
+	for(i=0; i<categoryNumberArray.length; i++)
+	{
+		console.log(i+" -> "+categoryArray[categoryNumberArray[i]].directory);		
+	}
+	console.log("****************");
 }
 
 var categoryNumberArray = [];
@@ -79,4 +98,7 @@ for (i = 0; i < fileInfoArrayRaw.length; i++) {
 }  
 */
 
-window.onload = clickHandler;
+//window.onload = clickHandler;
+$(document).ready(clickHandler);
+$("#picture").click(clickHandler);
+//clickHandler
